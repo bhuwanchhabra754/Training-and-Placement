@@ -1,0 +1,12 @@
+flask
+flask-cors
+authlib
+python-dotenv
+
+pandas
+numpy
+
+mysql-connector-python
+
+werkzeug
+requests

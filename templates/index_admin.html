@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Placement Dashboard | Training & Placement Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #eef2f7, #e3e8f0);
+      min-height: 100vh;
+    }
+
+    /* ===== TOP BAR ===== */
+    .top-bar {
+      background: #ffffff;
+      padding: 16px 22px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .top-bar h4 {
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* ===== PAGE TITLE ===== */
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 35px;
+      color: #2c3e50;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .stat-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      transition: all 0.25s ease;
+      height: 100%;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    }
+
+    .stat-card h6 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+
+    .stat-card p {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0;
+      color: #0d6efd;
+    }
+
+    /* ===== ACTION BUTTONS ===== */
+    .action-box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    .btn-action {
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-weight: 600;
+      margin: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body class="p-4">
+
+<div class="container">
+
+  <!-- TOP BAR -->
+  <div class="top-bar d-flex justify-content-between align-items-center">
+    <h4>Placement Analytics</h4>
+    <a href="{{ url_for('home') }}" class="btn btn-outline-dark btn-sm">
+      ← Back to Home
+    </a>
+  </div>
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    Placement Overview Dashboard
+  </div>
+
+  <!-- STATISTICS GRID -->
+  <div class="row g-4 mb-5">
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Total Students</h6>
+        <p>{{ stats.total_students }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Total Companies</h6>
+        <p>{{ stats.total_companies }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Total Applications</h6>
+        <p>{{ stats.total_applications }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Eligible Students</h6>
+        <p>{{ stats.total_eligible }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Not Eligible</h6>
+        <p>{{ stats.total_not_eligible }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Applied</h6>
+        <p>{{ stats.total_applied }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3">
+      <div class="stat-card">
+        <h6>Not Applied</h6>
+        <p>{{ stats.total_not_applied }}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-box">
+
+    <a href="{{ url_for('companies_dashboard') }}"
+       class="btn btn-primary btn-action">
+      Company-wise Analytics
+    </a>
+
+    <a href="{{ url_for('upload_students') }}"
+       class="btn btn-warning btn-action">
+      Upload Students
+    </a>
+
+    <a href="{{ url_for('admin_add_company') }}"
+       class="btn btn-success btn-action">
+      Add Company
+    </a>
+
+    <a href="{{ url_for('admin_companies') }}"
+       class="btn btn-info btn-action">
+      View All Companies
+    </a>
+
+    <a href="{{ url_for('add_tutor') }}"
+       class="btn btn-secondary btn-action">
+      Add Tutor
+    </a>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

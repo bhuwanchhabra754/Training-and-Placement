@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Tutor | Training & Placement Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .page-header h4 {
+            font-weight: 700;
+            margin: 0;
+            color: #0d6efd;
+        }
+
+        /* ===== FORM CARD ===== */
+        .page-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .btn {
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 8px 28px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-4 mb-5">
+
+    <!-- HEADER -->
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h4>Add Tutor</h4>
+        <a href="{{ url_for('admin_dashboard') }}"
+           class="btn btn-outline-secondary btn-sm">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="page-card">
+
+        <form method="POST" action="{{ url_for('add_tutor') }}">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Tutor Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Program</label>
+                    <input type="text" name="program" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Semester</label>
+                    <input type="text" name="semester" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Section</label>
+                    <input type="text" name="section" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Specialization</label>
+                    <input type="text" name="specialization" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Class Strength</label>
+                    <input type="number" name="strength" class="form-control" required>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">
+                    Add Tutor
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        {% for category, message in messages %}
+          Swal.fire({
+            title: "{{ 'Success' if category == 'success' else 'Error' }}",
+            text: "{{ message }}",
+            icon: "{{ category }}",
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000
+          });
+        {% endfor %}
+      });
+    </script>
+  {% endif %}
+{% endwith %}
+
+</body>
+</html>

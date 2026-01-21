@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit {{ company.name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Edit Company - {{ company.name }}</h2>
+
+    <form action="{{ url_for('update_company', company_id=company.id) }}" method="POST">
+        <div class="mb-3">
+            <label class="form-label">Company Name</label>
+            <input type="text" name="name" class="form-control" value="{{ company.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Job Type</label>
+            <input type="text" name="job_type" class="form-control" value="{{ company.job_type }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Package</label>
+            <input type="text" name="package" class="form-control" value="{{ company.package }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Eligibility</label>
+            <input type="text" name="eligibility" class="form-control" value="{{ company.eligibility }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-control" value="{{ company.location }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Drive Date</label>
+            <input type="date" name="drive_date" class="form-control" value="{{ company.drive_date }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Job Description</label>
+            <textarea name="job_description" class="form-control">{{ company.job_description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Selection Process</label>
+            <select name="selection_process" class="form-control">
+                {% for step in company.selection_process %}
+                    <option value="{{ step }}" selected>{{ step }}</option>
+                {% endfor %}
+                <option value="Written Test">Written Test</option>
+                <option value="Technical Interview">Technical Interview</option>
+                <option value="HR Interview">HR Interview</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nomination Form (Google Form Link)</label>
+            <input type="url" name="nomination_form" class="form-control" value="{{ company.nomination_form }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

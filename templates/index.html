@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training & Placement Portal</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .site-header {
+            padding: 40px 0 30px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .site-header h1 {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .site-header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        /* Main Section */
+        .role-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .role-card {
+            width: 280px;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #212529;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0d6efd, #20c997);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            z-index: 0;
+        }
+
+        .role-card:hover::before {
+            opacity: 1;
+        }
+
+        .role-card:hover {
+            transform: translateY(-14px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+            color: #ffffff;
+        }
+
+        .role-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .role-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .role-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .role-card p {
+            font-size: 15px;
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: rgba(0, 0, 0, 0.35);
+            color: #dee2e6;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .role-card {
+                width: 100%;
+                max-width: 320px;
+                height: 260px;
+            }
+        }
+
+        /* ---------------- AI Assistant Button & Popup ---------------- */
+        .ai-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            color: #0d6efd;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 16px;
+            font-weight: 600;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-btn:hover {
+            transform: scale(1.05);
+            background: #0d6efd;
+            color: #ffffff;
+        }
+
+        /* Chat Popup */
+        .ai-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 360px;
+            height: 480px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .ai-popup-header {
+            background: linear-gradient(135deg, #0d6efd, #20c997);
+            color: white;
+            padding: 14px 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-popup-header button {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .ai-chat-box {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            font-size: 14px;
+        }
+
+        .ai-msg {
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            max-width: 85%;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .ai-msg.user {
+            background: #0d6efd;
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-msg.ai {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            color: #212529;
+            margin-right: auto;
+        }
+
+        .ai-input-area {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 1px solid #dee2e6;
+            background: #ffffff;
+        }
+
+        .ai-input-area input {
+            flex: 1;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            padding: 10px;
+            outline: none;
+        }
+
+        .ai-input-area button {
+            border: none;
+            background: #0d6efd;
+            color: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+        .ai-input-area button:hover {
+            background: #0b5ed7;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ✅ AI Assistant Button -->
+<button class="ai-btn" onclick="toggleAI()">
+    🤖 AI Assistant
+</button>
+
+<!-- ✅ AI Popup Window -->
+<div class="ai-popup" id="aiPopup">
+    <div class="ai-popup-header">
+        <span>🤖 Placement AI Assistant</span>
+        <button onclick="toggleAI()">✖</button>
+    </div>
+
+    <div class="ai-chat-box" id="aiChatBox">
+        <div class="ai-msg ai"><b>AI:</b> Hi! Ask me anything about the Training & Placement Portal ✅</div>
+    </div>
+
+    <div class="ai-input-area">
+        <input type="text" id="aiUserInput" placeholder="Type your question..." />
+        <button onclick="sendAI()">Send</button>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+    <h1>Training & Placement Portal</h1>
+    <p>Your centralized platform for placements, guidance, and opportunities</p>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="role-container">
+    <div class="container">
+        <div class="row justify-content-center g-4">
+
+            <!-- ADMIN -->
+            <div class="col-md-4 d-flex justify-content-center">
+                <a href="{{ url_for('admin_login') }}" class="role-card">
+                    <div class="role-icon">🛠️</div>
+                    <div class="role-title">Admin</div>
+                    <p class="mt-2">Manage companies & platform</p>
+                </a>
+            </div>
+
+            <!-- TUTOR -->
+            <div class="col-md-4 d-flex justify-content-center">
+                <a href="{{ url_for('tutor_login') }}" class="role-card">
+                    <div class="role-icon">👨‍🏫</div>
+                    <div class="role-title">Tutor</div>
+                    <p class="mt-2">Guide and monitor students</p>
+                </a>
+            </div>
+
+            <!-- STUDENT -->
+            <div class="col-md-4 d-flex justify-content-center">
+                <a href="{{ url_for('student_login') }}" class="role-card">
+                    <div class="role-icon">🎓</div>
+                    <div class="role-title">Student</div>
+                    <p class="mt-2">Explore & apply for jobs</p>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    © {{ now().year if now else '2025' }} Training & Placement Portal · All Rights Reserved
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function toggleAI() {
+    const popup = document.getElementById("aiPopup");
+    popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+}
+
+// ✅ Send message to backend
+async function sendAI() {
+    const input = document.getElementById("aiUserInput");
+    const question = input.value.trim();
+    if (!question) return;
+
+    const chatBox = document.getElementById("aiChatBox");
+
+    // show user message
+    chatBox.innerHTML += `<div class="ai-msg user"><b>You:</b> ${question}</div>`;
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // show thinking...
+    const loadingId = "loading_" + Date.now();
+    chatBox.innerHTML += `<div class="ai-msg ai" id="${loadingId}"><b>AI:</b> <i>Thinking...</i></div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+        const response = await fetch("/api/ai/ask", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ question: question })
+        });
+
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+
+        if (data.answer) {
+            chatBox.innerHTML += `<div class="ai-msg ai"><b>AI:</b> ${data.answer}</div>`;
+        } else {
+            chatBox.innerHTML += `<div class="ai-msg ai"><b>AI:</b> ❌ ${data.error}</div>`;
+        }
+    } catch (error) {
+        document.getElementById(loadingId).remove();
+        chatBox.innerHTML += `<div class="ai-msg ai"><b>AI:</b> ❌ Backend not connected</div>`;
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// ✅ Enter key support
+document.getElementById("aiUserInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendAI();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Companies | Training & Placement Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .page-header h4 {
+            font-weight: 700;
+            margin: 0;
+            color: #0d6efd;
+        }
+
+        /* ===== FILTER CARD ===== */
+        .filter-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        /* ===== LIST CARD ===== */
+        .list-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .list-group-item {
+            border: none;
+            border-bottom: 1px solid #e9ecef;
+            padding: 14px 18px;
+        }
+
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+        .company-name {
+            font-weight: 600;
+            text-decoration: none;
+            color: #0d6efd;
+        }
+
+        .company-name:hover {
+            text-decoration: underline;
+        }
+
+        .btn-sm {
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-4 mb-5">
+
+    <!-- HEADER -->
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h4>Companies</h4>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-card">
+        <form method="GET" action="{{ url_for('admin_companies') }}">
+            <div class="row align-items-center g-3">
+                <div class="col-md-4">
+                    <select name="role" class="form-select">
+                        <option value="">Filter by Job Role</option>
+                        {% for role in job_roles %}
+                            <option value="{{ role }}"
+                                {% if selected_role == role %}selected{% endif %}>
+                                {{ role }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Filter
+                    </button>
+                </div>
+
+                {% if selected_role %}
+                <div class="col-md-2">
+                    <a href="{{ url_for('admin_companies') }}"
+                       class="btn btn-outline-secondary w-100">
+                        Clear
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- COMPANY LIST -->
+    <div class="list-card">
+        {% if companies %}
+            <ul class="list-group list-group-flush">
+                {% for company in companies %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <!-- Company Name -->
+                    <a href="{{ url_for('set_eligibility', company_id=company.id) }}"
+                       class="company-name">
+                        {{ company.name }}
+                    </a>
+
+                    <!-- ACTIONS -->
+                    <div>
+                        <a href="{{ url_for('set_eligibility', company_id=company.id) }}"
+                           class="btn btn-warning btn-sm me-2">
+                            Update Eligibility
+                        </a>
+
+                        <form action="{{ url_for('delete_company', company_id=company.id) }}"
+                              method="POST"
+                              style="display:inline-block;"
+                              onsubmit="return confirm('Are you sure you want to delete this company?');">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted text-center py-4">
+                No companies available.
+            </p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

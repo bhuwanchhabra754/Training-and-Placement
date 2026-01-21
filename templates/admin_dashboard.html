@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #eef2f7;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .dashboard-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+        }
+        h1 {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .btn-custom {
+            border-radius: 10px;
+            padding: 12px 22px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: 0.2s;
+        }
+        .btn-custom:hover {
+            transform: scale(1.03);
+        }
+        .top-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+        .btn-info {
+            color: white !important;
+            background: linear-gradient(135deg,#17a2b8,#138496);
+            border: none;
+        }
+        .btn-info:hover {
+            background: linear-gradient(135deg,#138496,#0f6674);
+        }
+    </style>
+</head>
+
+<body class="p-4">
+    <div class="container">
+
+        <!-- Top Navigation Buttons -->
+        <div class="top-buttons">
+            <a href="/" class="btn btn-dark btn-custom">🏠 Home</a>
+            <a href="{{ url_for('admin_companies') }}" class="btn btn-secondary btn-custom">🏢 Companies</a>
+        </div>
+
+        <div class="dashboard-card">
+
+            <h1 class="mb-4">Admin Dashboard</h1>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <!-- Upload Students Section -->
+            <div class="mb-4">
+                <div class="section-title">📤 Upload Bulk Students (CSV/Excel)</div>
+                <form action="/admin/upload-students" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" class="form-control mb-3" required>
+                    <button type="submit" class="btn btn-success btn-custom">Upload File</button>
+                </form>
+            </div>
+
+            <!-- Edit Student Section -->
+            <div class="mb-3">
+                <div class="section-title">✏️ Edit Existing Student</div>
+                <a href="{{ url_for('edit_student_by_email') }}" class="btn btn-outline-primary btn-custom">
+                    Edit Student by Email
+                </a>
+            </div>
+
+            <!-- Add Single Student Section -->
+            <div>
+                <div class="section-title">➕ Add Single Student</div>
+                <a href="{{ url_for('add_student') }}" class="btn btn-info btn-custom">
+                    Add Student
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

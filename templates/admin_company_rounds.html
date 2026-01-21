@@ -1,0 +1,24 @@
+<h2>Company Rounds Management</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Company</th>
+            <th>Manage Rounds</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for c in companies %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ c.name }}</td>
+            <td>
+                <a href="{{ url_for('admin_company_rounds_view', company_id=c.id) }}"
+                   class="btn btn-primary btn-sm">View Rounds / Upload</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

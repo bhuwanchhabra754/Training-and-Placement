@@ -1,0 +1,15 @@
+<h2>{{ company.name }} — Selection Rounds</h2>
+
+<ul class="list-group mt-3">
+  {% for r in rounds %}
+    <li class="list-group-item d-flex justify-content-between">
+      Round {{ r.round_number }}
+      <a href="{{ url_for('tutor_view_round_students',
+                           company_id=company.id,
+                           round_number=r.round_number) }}"
+         class="btn btn-primary btn-sm">
+        View Students
+      </a>
+    </li>
+  {% endfor %}
+</ul>

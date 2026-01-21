@@ -1,0 +1,30 @@
+<h2>Company {{ company_id }} — Round {{ round_number }} Results</h2>
+
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>Reg No</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.student_regno }}</td>
+      <td>{{ s.name }}</td>
+      <td>{{ s.email }}</td>
+
+      <td>
+        {% if s.status == "Passed" %}
+           <span class="badge bg-success">Passed</span>
+        {% else %}
+           <span class="badge bg-danger">Failed</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard | Training & Placement Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #e3e8f0);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            padding: 12px 20px;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* ===== CARD ===== */
+        .dashboard-card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #198754, #157347);
+            color: #ffffff;
+            padding: 18px 22px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .card-body p {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        /* ===== ACTION BUTTON ===== */
+        .action-btn {
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(13,110,253,0.35);
+        }
+
+        @media (max-width: 768px) {
+            .card-header-custom {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+
+        <a href="{{ url_for('home') }}" class="btn btn-outline-light btn-sm me-3">
+            ← Home
+        </a>
+
+        <span class="navbar-brand">Student Portal</span>
+
+        <div class="ms-auto">
+            <a href="{{ url_for('student_companies') }}" class="btn btn-light btn-sm me-2">
+                Companies
+            </a>
+            <a href="{{ url_for('student_logout') }}" class="btn btn-danger btn-sm">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- DASHBOARD CONTENT -->
+<div class="container mt-4">
+
+    <div class="dashboard-card mb-4">
+
+        <div class="card-header-custom">
+            Welcome, {{ student.name }}
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Registration No:</strong> {{ student.registration_number }}</p>
+                    <p><strong>Email:</strong> {{ student.email }}</p>
+                    <p><strong>Section:</strong> {{ student.section }}</p>
+                    <p><strong>Specialization:</strong> {{ student.specialization }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>CGPA:</strong> {{ student.cgpa }}</p>
+                    <p><strong>Backlogs:</strong> {{ student.backlogs }}</p>
+                    <p><strong>Semester:</strong> {{ student.semester }}</p>
+                    <p><strong>Status:</strong> {{ student.status }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTION -->
+    <div class="text-center">
+        <a href="{{ url_for('student_companies') }}"
+           class="btn btn-primary btn-lg action-btn">
+            View Eligible Companies
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

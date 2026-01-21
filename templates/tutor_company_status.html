@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Company Status | {{ company.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 22px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .page-header h4 {
+      font-weight: 700;
+      margin: 0;
+      color: #198754;
+    }
+
+    .sub-text {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    .stat-card h6 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6c757d;
+      margin-bottom: 6px;
+    }
+
+    .stat-card p {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+      color: #0d6efd;
+    }
+
+    /* ===== MAIN CARD ===== */
+    .content-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .table thead th {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .table tbody td {
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .btn-sm {
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+  <!-- HEADER -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h4>{{ company.name }} – Student Status</h4>
+      <div class="sub-text">
+        {{ tutor.section }} / {{ tutor.specialization }}
+      </div>
+    </div>
+    <a href="{{ url_for('tutor_companies') }}" class="btn btn-outline-secondary btn-sm">
+      ← Back to Companies
+    </a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <h6>Total Students</h6>
+      <p>{{ stats.total_students }}</p>
+    </div>
+    <div class="stat-card">
+      <h6>Eligible</h6>
+      <p>{{ stats.eligible_students }}</p>
+    </div>
+    <div class="stat-card">
+      <h6>Not Eligible</h6>
+      <p>{{ stats.not_eligible_students }}</p>
+    </div>
+    <div class="stat-card">
+      <h6>Applied</h6>
+      <p>{{ stats.applied_students }}</p>
+    </div>
+    <div class="stat-card">
+      <h6>Not Applied</h6>
+      <p>{{ stats.not_applied_students }}</p>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="content-card">
+    {% if students %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle text-center">
+        <thead class="table-primary">
+          <tr>
+            <th>#</th>
+            <th>Reg. No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>CGPA</th>
+            <th>Backlogs</th>
+            <th>Eligible</th>
+            <th>Status</th>
+            <th>Applied</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ s.registration_number or '-' }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.cgpa }}</td>
+            <td>{{ s.backlogs }}</td>
+
+            <td>
+              {% if s.eligible == 'Yes' %}
+                <span class="badge bg-success">Yes</span>
+              {% else %}
+                <span class="badge bg-danger">No</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if 'Eligible' in s.application_status %}
+                <span class="badge bg-success">{{ s.application_status }}</span>
+              {% elif 'Applied' in s.application_status %}
+                <span class="badge bg-info">{{ s.application_status }}</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ s.application_status }}</span>
+              {% endif %}
+            </td>
+
+            <td>
+              <form action="{{ url_for('tutor_update_applied', student_id=s.student_id, company_id=company.id) }}"
+                    method="POST"
+                    class="d-flex justify-content-center gap-2">
+
+                <select name="applied" class="form-select form-select-sm w-auto">
+                  <option value="Yes" {% if s.applied == 'Yes' %}selected{% endif %}>Yes</option>
+                  <option value="No" {% if s.applied == 'No' %}selected{% endif %}>No</option>
+                </select>
+
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                  Update
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-muted text-center">
+        No students found for your section & specialization.
+      </p>
+    {% endif %}
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
