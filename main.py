@@ -1,7 +1,7 @@
 from multiprocessing.resource_tracker import getfd
 import os
 import json
-import mysql
+import mysql.connector
 import pandas as pd
 from flask import (
     Flask, request, render_template, redirect, send_file, url_for, flash,
