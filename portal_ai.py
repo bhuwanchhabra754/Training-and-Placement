@@ -41,9 +41,11 @@ def get_ai_agent():
     if not db_name: missing.append("DB_NAME")
 
     if missing:
-        raise ValueError(f"Missing DB env variables: {', '.join(missing)}. Add them in Railway Variables.")
+        raise ValueError(
+            f"Missing DB env variables: {', '.join(missing)}. Add them in Railway Variables."
+        )
 
-    # ✅ SQLAlchemy URL with port
+    # ✅ SQLAlchemy URL
     url = URL.create(
         drivername="mysql+pymysql",
         username=db_user,
@@ -55,19 +57,20 @@ def get_ai_agent():
 
     engine = create_engine(
         url,
-        pool_pre_ping=True,   # ✅ avoids stale connection issues
-        pool_recycle=280,     # ✅ helps Railway connection stability
+        pool_pre_ping=True,   # avoids stale connections
+        pool_recycle=280,     # Railway-friendly
     )
 
     db = SQLDatabase(engine)
 
-    # ✅ SQL Agent
     agent_executor = create_sql_agent(
         llm=llm,
         db=db,
         verbose=True,
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
+        return_intermediate_steps=False
     )
+
 
     return agent_executor
 
@@ -84,24 +87,30 @@ def get_agent():
     return _AGENT
 
 
-def AI(question: str) -> str:
-    """Main function called by Flask route."""
-    prompt = f"""
+# =======================
+# ✅ AI CLASS (OPTION 1)
+# =======================
+class AI:
+    def __init__(self, question: str):
+        self.question = question
+
+    def ask(self) -> str:
+        prompt = f"""
 You are an AI assistant for a Training & Placement portal.
 Answer user questions using the MySQL database.
 Do NOT show SQL queries in the final answer.
 
-Question: {question}
+Question: {self.question}
 """
 
-    try:
-        agent = get_agent()
-        result = agent.invoke({"input": prompt})
-        return result.get("output", "No output returned.")
-    except Exception as e:
-        # ✅ return readable error rather than crashing whole app
-        return f"AI Error: {str(e)}"
+        try:
+            agent = get_agent()
+            result = agent.invoke({"input": prompt})
+            return result.get("output", "No output returned.")
+        except Exception as e:
+            return f"AI Error: {str(e)}"
 
 
+# ✅ Local testing
 if __name__ == "__main__":
-    print(AI("List me all tutors names with sections"))
+    ai = AI("List me companies that have SDE job description")

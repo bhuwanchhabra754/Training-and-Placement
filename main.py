@@ -21,24 +21,20 @@ from flask_cors import CORS
 from portal_ai import AI  
 app = Flask(__name__)
 CORS(app)
+
+app.secret_key = "your_secret_key"
+
 @app.route("/api/ai/ask", methods=["POST"])
 def ask_ai():
     data = request.get_json()
-    question = data.get("question", "").strip()
+    question = data.get("question")
 
     if not question:
         return jsonify({"error": "Question is required"}), 400
 
-    try:
-        answer = AI(question)
-        return jsonify({"answer": answer})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    response = AI(question).ask()
+    return jsonify({"answer": response})
 
-
-
-app = Flask(__name__)
-app.secret_key = "your_secret_key"
 
 # ---------------- CONFIG ----------------
 # UPLOAD_FOLDER is the folder where files are physically stored on disk
@@ -1593,4 +1589,3 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 app.config["PREFERRED_URL_SCHEME"] = "https"
-
