@@ -179,6 +179,15 @@ def ensure_helper_tables():
     conn = get_connection()
     cursor = conn.cursor()
     try:
+        # ✅ 1) Ensure companies table exists (required for FK)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS companies (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL
+            )
+        """)
+
+        # ✅ 2) company_shortlist table (depends on companies)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS company_shortlist (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -192,10 +201,14 @@ def ensure_helper_tables():
                 status ENUM('Passed','Failed') DEFAULT 'Passed',
                 uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE KEY uniq_student_round (company_id, round_number, registration_number),
-                FOREIGN KEY (company_id) REFERENCES companies(id)
+                CONSTRAINT fk_company_shortlist_company
+                    FOREIGN KEY (company_id) REFERENCES companies(id)
+                    ON DELETE CASCADE
+                    ON UPDATE CASCADE
             )
         """)
 
+        # ✅ 3) uploaded_round_files table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS uploaded_round_files (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -208,9 +221,16 @@ def ensure_helper_tables():
         """)
 
         conn.commit()
+        print("✅ Helper tables ensured successfully.")
+
+    except Exception as e:
+        print("⚠️ ensure_helper_tables error:", e)
+        conn.rollback()
+
     finally:
         cursor.close()
         conn.close()
+
 
 # 🔥 CALL IT (THIS WAS MISSING)
 ensure_helper_tables()
