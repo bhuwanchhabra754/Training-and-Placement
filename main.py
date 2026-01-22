@@ -1589,4 +1589,8 @@ def student_apply(company_name):
 # ---------------- MAIN ----------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+app.config["PREFERRED_URL_SCHEME"] = "https"
 
